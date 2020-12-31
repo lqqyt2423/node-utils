@@ -1,6 +1,6 @@
 {
     "name": "@liqiqiang/utils",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "",
     "main": "dist/index.js",
     "files": [
@@ -13,7 +13,7 @@
         "clean": "rm -rf ./dist",
         "build": "tsc"
     },
-    "author": "",
+    "author": "liqiang",
     "license": "ISC",
     "dependencies": {},
     "devDependencies": {
@@ -26,5 +26,6 @@
         "ts-jest": "^26.4.4",
         "ts-node": "^9.1.1",
         "typescript": "^4.1.3"
-    }
+    },
+    "repository": "git@github.com:lqqyt2423/node-utils.git"
 }

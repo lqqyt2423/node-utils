@@ -1,0 +1,23 @@
+{
+  "name": "utils",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "nvmd": "./bin/nvmd.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lqqyt2423/node-utils.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lqqyt2423/node-utils/issues"
+  },
+  "homepage": "https://github.com/lqqyt2423/node-utils#readme"
+}

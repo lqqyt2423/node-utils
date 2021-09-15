@@ -5,22 +5,66 @@
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
-const childProcess = require('child_process');
 
-const DATA_PATH = os.homedir();
-const DB_NAME = '.nvmp-db.json';
-const DB_PATH = path.resolve(DATA_PATH, DB_NAME);
+const dbPath = path.resolve(os.homedir(), '.nvmp-db.json');
+const commands = ['help', 'add', 'find', 'list', 'clean'];
 
-function resetDb() {
-  try {
-    fs.unlinkSync(DB_PATH);
-  } catch (err) {}
+let command = process.argv[2] || 'help';
+if (command === '-h' || command === '--help') command = 'help';
+if (command === 'ls') command = 'list';
+if (!commands.includes(command)) command = 'help';
+
+if (command === 'help') {
+  console.log(`Nvmd is a tool for managing project default node version. You should install nvm first.
+
+Usage: nvmd <command>
+
+The commands are:
+
+    help     show this help
+    add      add current directory and current node version to local database
+    list     list all added directories and versions
+    find     find current directory node version
+    clean    clean the local database
+`);
+  
+  process.exit();
+}
+
+if (command === 'list') {
+  console.log(getDb());
+  process.exit();
+}
+
+if (command === 'find') {
+  const db = getDb();
+  if (!db) process.exit();
+
+  const version = db[process.cwd()];
+  if (version) console.log(version);
+  process.exit();
+}
+
+if (command === 'add') {
+  const db = getDb() || {};
+  const cwd = process.cwd();
+  const version = process.version;
+  db[cwd] = version;
+  saveDb(db);
+  console.log(`Add ${cwd} with ${version} version`);
+  process.exit();
+}
+
+if (command === 'clean') {
+  rmDb();
+  console.log('Cleaned');
+  process.exit();
 }
 
 function getDb() {
   let content;
   try {
-    content = fs.readFileSync(DB_PATH, 'utf8');
+    content = fs.readFileSync(dbPath, 'utf8');
   } catch (err) {
     return null;
   }
@@ -29,12 +73,10 @@ function getDb() {
   try {
     db = JSON.parse(content);
   } catch (err) {
-    resetDb();
     return null;
   }
 
   if (typeof db !== 'object') {
-    resetDb();
     return null;
   }
 
@@ -42,33 +84,11 @@ function getDb() {
 }
 
 function saveDb(db) {
-  fs.writeFileSync(DB_PATH, JSON.stringify(db, null, 2), 'utf8');
+  fs.writeFileSync(dbPath, JSON.stringify(db, null, 2), 'utf8');
 }
 
-function find() {
-  const db = getDb();
-  if (!db) return;
-
-  const cwd = process.cwd();
-  const version = db[cwd];
-  
-  return version;
-}
-
-function add() {
-  const db = getDb() || {};
-  const cwd = process.cwd();
-  db[cwd] = childProcess.execSync('node -v').toString().trim();
-  saveDb(db);
-}
-
-const argv = process.argv.slice(2);
-if (argv[0] === 'find') {
-  const version = find();
-  if (version) console.log(version);
-  process.exit();
-}
-else if (argv[0] === 'add' || !argv[0]) {
-  add();
-  process.exit();
+function rmDb() {
+  try {
+    fs.unlinkSync(dbPath);
+  } catch (err) {}
 }

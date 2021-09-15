@@ -10,3 +10,8 @@ function nvmp() {
     fi
 }
 nvmp
+
+function cd() {
+    builtin cd $1
+    nvmp
+}

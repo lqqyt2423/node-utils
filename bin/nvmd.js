@@ -6,6 +6,7 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 
+const defaultNodeVersion = 'v16.9.1';
 const dbPath = path.resolve(os.homedir(), '.nvmp-db.json');
 const commands = ['help', 'add', 'find', 'list', 'clean'];
 
@@ -40,8 +41,8 @@ if (command === 'find') {
   const db = getDb();
   if (!db) process.exit();
 
-  const version = db[process.cwd()];
-  if (version) console.log(version);
+  const version = db[process.cwd()] || defaultNodeVersion;
+  console.log(version);
   process.exit();
 }
 

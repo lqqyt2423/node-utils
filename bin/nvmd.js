@@ -6,7 +6,7 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 
-const defaultNodeVersion = 'v16.13.2';
+const defaultNodeVersion = 'v16.14.0';
 const dbPath = path.resolve(os.homedir(), '.nvmp-db.json');
 const commands = ['help', 'add', 'find', 'list', 'clean'];
 
@@ -28,7 +28,7 @@ The commands are:
     find     find current directory node version
     clean    clean the local database
 `);
-  
+
   process.exit();
 }
 
